@@ -5,6 +5,9 @@ description: 'GitHub action to install ESP-IDF tools for building esp-idf projec
 on:
   # Triggers the workflow on tag create like v1.0, v2.0.0 and so on
   push:
+  workflow_dispatch:
+    branches:
+      - 'main'
 
 branding:
   icon: 'box'
