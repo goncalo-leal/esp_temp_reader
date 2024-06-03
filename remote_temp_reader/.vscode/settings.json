@@ -12,5 +12,10 @@
         "target/esp32.cfg"
     ],
     "idf.pythonBinPath": "/home/goncalo/.espressif/python_env/idf5.2_py3.10_env/bin/python",
-    "idf.toolsPath": "/home/goncalo/.espressif"
+    "idf.toolsPath": "/home/goncalo/.espressif",
+    "idf.flashType": "UART",
+    "idf.port": "/dev/ttyUSB0",
+    "files.associations": {
+        "stdio.h": "c"
+    }
 }
