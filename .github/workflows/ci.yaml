@@ -1,6 +1,4 @@
 name: 'ESP-IDF Project Build'
-author: 'rmshub'
-description: 'GitHub action to install ESP-IDF tools for building esp-idf projects'
 
 on:
   # Triggers the workflow on tag create like v1.0, v2.0.0 and so on
@@ -8,10 +6,6 @@ on:
   workflow_dispatch:
     branches:
       - 'main'
-
-branding:
-  icon: 'box'
-  color: 'orange'
 
 inputs:
   fetch-depth: 
