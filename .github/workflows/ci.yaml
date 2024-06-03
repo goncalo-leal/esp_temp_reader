@@ -26,9 +26,7 @@ jobs:
           ./install.sh esp32
           . export.sh
 
-      - name: Build firmware
-        run: |
-          cd remote_temp_reader/
+          cd $GITHUB_WORKSPACE/remote_temp_reader
           idf.py set-target esp32c3
           idf.py build
 
