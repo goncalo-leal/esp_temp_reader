@@ -7,24 +7,6 @@ on:
     branches:
       - 'main'
 
-inputs:
-  fetch-depth: 
-    description: 'Number of commits to fetch. 0 indicates all history for all branches and tags'
-    required: false
-    default: '1'
-  token:
-    description: 'Personal access token (PAT) used to fetch the repository'
-    required: false
-    default: ${{ github.token }}
-  submodules:
-    description: 'Whether to checkout submodules: true to checkout submodules or recursive'
-    required: false
-    default: true
-  esp_idf_target:
-    description: 'Sets the target (chip) for which the project is built'
-    required: false
-    default: 'esp32'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,9 +14,9 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3
         with:
-          fetch-depth: ${{ inputs.fetch-depth }}
-          token: ${{ inputs.token }}
-          submodules: ${{ inputs.submodules }}
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: 'recursive'
 
       - name: Cache esp-idf and its tools
         id: esp-idf-cache
@@ -57,6 +39,6 @@ jobs:
       - run: |
           source ~/esp/esp-idf/export.sh
           cd ${{ github.workspace }}/remote_temp_reader
-          idf.py set-target ${{ inputs.esp_idf_target }}
+          idf.py set-target esp32
           idf.py build
         shell: bash
