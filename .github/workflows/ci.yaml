@@ -1,36 +1,44 @@
-# This is a esp idf workflow to build ESP32 based project
+name: ESP32 Build
 
-name: Build and Artifact the ESP-IDF Project
-
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on every push
   push:
+    branches:
+      - main
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Install ESP-IDF and Build project
-        uses: rmshub/esp-idf-action@v5
-        working-directory: ./remote_temp_reader
-        with: 
-            esp_idf_version: v5.0
-            esp_idf_target: esp32
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Archive build output artifacts
-        uses: actions/upload-artifact@v3
+      - name: Install ESP-IDF
+        run: |
+          sudo apt-get install -y wget
+
+          sudo apt-get install git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+
+          mkdir -p ~/esp
+          cd ~/esp
+          git clone --recursive https://github.com/espressif/esp-idf.git
+          cd ~/esp/esp-idf
+          ./install.sh esp32
+          . export.sh
+
+      - name: Build firmware
+        run: |
+          cd ~/remote_temp_reader
+          idf.py set-target esp32c3
+          idf.py build
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: build
-          path: |
-            build/bootloader/bootloader.bin
-            build/partition_table/partition-table.bin
-            build/${{ github.event.repository.name }}.bin
+          tag_name: v1.0.${{ github.run_number }}
+          release_name: Release v1.0.${{ github.run_number }}
+          draft: false
+          prerelease: false
