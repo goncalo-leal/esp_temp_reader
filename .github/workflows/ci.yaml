@@ -19,11 +19,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Go to the correct directory
-        run: cd remote_temp_reader
-
       - name: Install ESP-IDF and Build project
         uses: rmshub/esp-idf-action@v5
+        working-directory: ./remote_temp_reader
         with: 
             esp_idf_version: v5.0
             esp_idf_target: esp32
